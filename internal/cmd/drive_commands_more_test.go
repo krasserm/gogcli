@@ -44,9 +44,9 @@ func TestDriveCommands_MoreCoverage(t *testing.T) {
 					}
 				}
 				if strings.Contains(q, "empty") {
-				_ = json.NewEncoder(w).Encode(map[string]any{
-					"files": []map[string]any{},
-				})
+					_ = json.NewEncoder(w).Encode(map[string]any{
+						"files": []map[string]any{},
+					})
 				return
 			}
 			_ = json.NewEncoder(w).Encode(map[string]any{
