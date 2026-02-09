@@ -523,7 +523,10 @@ func fetchUserEmailWithURL(ctx context.Context, accessToken string, url string) 
 
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{
+		Transport: &http.Transport{Proxy: http.ProxyFromEnvironment},
+		Timeout:   10 * time.Second,
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {

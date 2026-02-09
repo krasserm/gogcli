@@ -35,7 +35,10 @@ func EmailForRefreshToken(ctx context.Context, client string, refreshToken strin
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	ctx = context.WithValue(ctx, oauth2.HTTPClient, &http.Client{Timeout: timeout})
+	ctx = context.WithValue(ctx, oauth2.HTTPClient, &http.Client{
+		Transport: &http.Transport{Proxy: http.ProxyFromEnvironment},
+		Timeout:   timeout,
+	})
 
 	ts := cfg.TokenSource(ctx, &oauth2.Token{RefreshToken: refreshToken})
 

@@ -78,7 +78,10 @@ func tokenSourceForAccountScopes(ctx context.Context, serviceLabel string, email
 	}
 
 	// Ensure refresh-token exchanges don't hang forever.
-	ctx = context.WithValue(ctx, oauth2.HTTPClient, &http.Client{Timeout: defaultHTTPTimeout})
+	ctx = context.WithValue(ctx, oauth2.HTTPClient, &http.Client{
+		Transport: &http.Transport{Proxy: http.ProxyFromEnvironment},
+		Timeout:   defaultHTTPTimeout,
+	})
 
 	return cfg.TokenSource(ctx, &oauth2.Token{RefreshToken: tok.RefreshToken}), nil
 }
@@ -123,6 +126,7 @@ func optionsForAccountScopes(ctx context.Context, serviceLabel string, email str
 		}
 	}
 	baseTransport := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
 		TLSClientConfig: &tls.Config{
 			MinVersion: tls.VersionTLS12,
 		},

@@ -316,7 +316,10 @@ func (c *GmailWatchServeCmd) Run(ctx context.Context, kctx *kong.Context, flags 
 		cfg.MaxBodyBytes = defaultHookMaxBytes
 	}
 
-	hookClient := &http.Client{Timeout: cfg.HookTimeout}
+	hookClient := &http.Client{
+		Transport: &http.Transport{Proxy: http.ProxyFromEnvironment},
+		Timeout:   cfg.HookTimeout,
+	}
 	server := &gmailWatchServer{
 		cfg:             cfg,
 		store:           store,
